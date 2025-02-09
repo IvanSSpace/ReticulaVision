@@ -1,99 +1,74 @@
 import axios from "axios"
 import { useState } from "react"
+import "./styles.css"
 
 function App() {
   const [file, setFile] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [imageUrl, setImageUrl] = useState("")
+  const [resultImage, setResultImage] = useState(null)
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0]
-    if (selectedFile && selectedFile.type.startsWith("image/")) {
+    if (selectedFile) {
       setFile(selectedFile)
-      setError("")
-    } else {
-      alert("Выберите допустимое изображение!")
-      setFile(null)
     }
   }
 
   const handleSubmit = async (e) => {
+    e.preventDefault()
+
     if (!file) {
-      alert("Пожалуйста, выберите файл.")
+      alert("Please select an image first!")
       return
     }
 
-    setLoading(true)
-    setError("")
-
-    // Шаг 1: Отправляем файл через REST API
     const formData = new FormData()
-    formData.append("file", file)
+    formData.append("image", file)
 
     try {
-      const response = await axios.post("http://localhost:4000/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      const response = await axios.post("http://localhost:5006/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        responseType: "arraybuffer", // Для получения бинарных данных
       })
 
-      const { filename, mimetype, path } = response.data
+      // Преобразуем полученные данные в Base64 для отображения в браузере
+      const arrayBuffer = response.data
+      const blob = new Blob([arrayBuffer], { type: "image/jpeg" })
+      const url = URL.createObjectURL(blob)
+      setResultImage(url)
+    } catch (error) {
+      console.error("Error uploading or processing image:", error)
+      alert("An error occurred while processing the image.")
+    }
+  }
 
-      // Шаг 2: Вызываем GraphQL мутацию для обработки файла
-      const gqlResponse = await axios.post("http://localhost:4000/graphql", {
-        query: `mutation UploadImage($filename: String!, $mimetype: String!, $path: String!) {
-          uploadImage(filename: $filename, mimetype: $mimetype, path: $path) {
-            id
-            url
-          }
-        }`,
-        variables: { filename, mimetype, path },
-      })
-
-      if (gqlResponse.data.errors) {
-        throw new Error(gqlResponse.data.errors[0].message)
-      }
-
-      const uploadedImageUrl = gqlResponse.data.data.uploadImage.url
-      setImageUrl(uploadedImageUrl)
-      alert(`Изображение успешно загружено! URL: ${uploadedImageUrl}`)
-    } catch (err) {
-      console.error("Ошибка загрузки:", err)
-      setError(err.message || "Произошла ошибка при загрузке изображения.")
-    } finally {
-      setLoading(false)
+  // Функция для сохранения обработанного изображения
+  const handleSaveImage = () => {
+    if (resultImage) {
+      // Создаем временную ссылку для скачивания
+      const link = document.createElement("a")
+      link.href = resultImage
+      link.download = "processed-image.jpg"
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
     }
   }
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Загрузка изображения</h1>
+    <div className="app-container">
+      <h1>Image Processing App</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          disabled={loading}
-          style={{ padding: 8, width: "100%" }}
-        />
-        <button
-          type="submit"
-          disabled={!file || loading}
-          style={{ marginTop: 10, padding: "8px 16px" }}
-        >
-          {loading ? "Загрузка..." : "Загрузить"}
-        </button>
+        <input type="file" accept="image/*" onChange={handleFileChange} />
+        <button type="submit">Upload and Process</button>
       </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {imageUrl && (
-        <div>
-          <p>Обработанное изображение:</p>
-          <img
-            src={`http://localhost:4000${imageUrl}`}
-            alt="Uploaded"
-            style={{ maxWidth: "100%" }}
-          />
+
+      {resultImage && (
+        <div className="result-container">
+          <h2>Processed Image:</h2>
+          <img src={resultImage} alt="Processed" className="processed-image" />
+          <button onClick={handleSaveImage} className="save-button">
+            Сохранить изображение
+          </button>
         </div>
       )}
     </div>
