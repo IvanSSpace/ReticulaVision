@@ -21,7 +21,13 @@ app.post("/upload", upload.single("image"), async (req, res) => {
     }
 
     // Обрабатываем изображение с помощью выделенного сервиса
-    const modifiedImageBuffer = await processImage(req.file.buffer)
+    const settings = {
+      brightness: 0.52,
+      noisePixel: 6.0,
+      blur: 1.0001,
+    }
+
+    const modifiedImageBuffer = await processImage(req.file.buffer, settings)
 
     // Отправляем обработанное изображение обратно клиенту
     res.set("Content-Type", "image/jpeg")

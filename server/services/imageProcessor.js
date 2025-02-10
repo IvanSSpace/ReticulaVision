@@ -30,7 +30,9 @@ const addNoise = (image, blockSize = 10) => {
     })
 }
 
-const processImage = async (imageBuffer) => {
+const processImage = async (imageBuffer, settings) => {
+  const { brightness, noisePixel, blur } = settings
+
   try {
     let image = sharp(imageBuffer)
 
@@ -40,16 +42,16 @@ const processImage = async (imageBuffer) => {
     // Шаг 2: Настройка контрастности
 
     // Шаг 3: Добавление шума
-    image = await addNoise(image, 2.0)
+    image = await addNoise(image, noisePixel)
 
     // Шаг 4: Настройка яркости
-    image = image.linear(0.52, 0)
+    image = image.linear(brightness, 0)
 
     // Шаг 5: Преобразование в JPEG
     image = image.toFormat("jpeg")
 
     // Шаг 6: Размытие
-    image = image.blur(1.0001)
+    image = image.blur(blur)
 
     // Шаг 6: Преобразование в буфер
     const modifiedImageBuffer = await image.toBuffer()
