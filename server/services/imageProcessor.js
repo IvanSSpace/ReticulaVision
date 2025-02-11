@@ -38,6 +38,8 @@ const processImage = async (imageBuffer, settings) => {
 
     // Шаг 1: Преобразование в градации серого
     // image = image.greyscale()
+    // image = image.grayscale()
+    // image = image.destroy()
 
     // Шаг 2: Настройка контрастности
 

@@ -23,7 +23,7 @@ app.post("/upload", upload.single("image"), async (req, res) => {
     // Обрабатываем изображение с помощью выделенного сервиса
     const settings = {
       brightness: 0.52,
-      noisePixel: 6.0,
+      noisePixel: 2.0,
       blur: 1.0001,
     }
 
