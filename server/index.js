@@ -1,6 +1,6 @@
 const express = require("express")
 const multer = require("multer")
-const cors = require("cors")
+const cors = require("cors") 
 const { processImage } = require("./services/imageProcessor")
 
 const app = express()
@@ -22,8 +22,8 @@ app.post("/upload", upload.single("image"), async (req, res) => {
 
     // Обрабатываем изображение с помощью выделенного сервиса
     const settings = {
-      brightness: 0.52,
-      noisePixel: 2.0,
+      brightness: 1.22,
+      noisePixel: 1.0,
       blur: 1.0001,
     }
 

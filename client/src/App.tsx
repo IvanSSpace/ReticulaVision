@@ -1,11 +1,7 @@
-import { ImageProcessor } from "./components/ImageProcessing/ImageProcessor"
+import MainPage from "./routes/MainPage/MainPage"
 import "./styles.css"
 function App() {
-  return (
-    <div className="app-container">
-      <ImageProcessor />
-    </div>
-  )
+  return <MainPage />
 }
 
 export default App

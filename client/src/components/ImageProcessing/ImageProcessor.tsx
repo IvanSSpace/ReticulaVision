@@ -1,8 +1,8 @@
 import axios from "axios"
 import { useState } from "react"
-import UploadFile from "../../feature/UploadFile/UploadFile"
+import UploadFile from "../../shared/ui/UploadFile/UploadFile"
 
-import Spinner from "../../ui/Spinner/Spinner"
+import Spinner from "../../shared/ui/Spinner/Spinner"
 import styles from "./ImageProecessor.module.scss"
 
 export const ImageProcessor = () => {
@@ -61,7 +61,7 @@ export const ImageProcessor = () => {
   return (
     <>
       <h1>Приложение для обработки изображений</h1>
-      <form onSubmit={handleSubmit}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <UploadFile onFileChange={handleFileChange} />
         <button type="submit" className={styles.submitButton}>
           Загрузить и обработать

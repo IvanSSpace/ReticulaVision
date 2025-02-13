@@ -1,0 +1,21 @@
+.mainPageContainer {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.photoContainer {
+  width: 70%;
+  height: 100%;
+  position: relative;
+}
+
+.settingsWrapper {
+  width: 30%;
+  height: 100%;
+  position: relative;
+}
