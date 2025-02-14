@@ -2,6 +2,7 @@ import cn from "classnames"
 import { useState } from "react"
 import CheckBox from "../../shared/ui/Checkbox/Checkbox"
 import styles from "./BorderSettings.module.scss"
+import { useSettingsStore } from "../../stores/settingsStore"
 
 interface BorderSettingsProps {
   startResizing: () => void
@@ -13,6 +14,8 @@ const settingTabs = ["CF", "RV", "SD", "R2"]
 export const BorderSettings = ({ startResizing, stopResizing }: BorderSettingsProps) => {
   const [activeTab, setActiveTab] = useState<string>("CF")
 
+  const { settings, setColorFilters } = useSettingsStore()
+
   return (
     <div className={styles.settingsContainer}>
       <div className={styles.separator} onMouseDown={startResizing} onMouseUp={stopResizing} />
@@ -20,7 +23,7 @@ export const BorderSettings = ({ startResizing, stopResizing }: BorderSettingsPr
         <div className={styles.tabs}>
           {settingTabs.map((tab, index) => (
             <button
-              key={index} // установить cn для применения состояния активного таба
+              key={index}
               onClick={() => setActiveTab(tab)}
               className={cn(styles.button, { [styles.active]: tab === activeTab })}
             >
@@ -34,8 +37,16 @@ export const BorderSettings = ({ startResizing, stopResizing }: BorderSettingsPr
             <>
               <div>Цветовые фильтры</div>
 
-              <CheckBox label="Черно-белый" />
-              <CheckBox label="Негатив" />
+              <CheckBox
+                checked={settings.colorFilters.blackAndWhite}
+                label="Черно-белый"
+                onChange={() => setColorFilters({ ...settings.colorFilters, blackAndWhite: !settings.colorFilters.blackAndWhite })}
+              />
+              <CheckBox
+                label="Негатив"
+                onChange={() => setColorFilters({ ...settings.colorFilters, negative: !settings.colorFilters.negative })}
+                checked={settings.colorFilters.negative}
+              />
             </>
           )}
           {activeTab === "RV" && <div>RV ACTIVE</div>}
