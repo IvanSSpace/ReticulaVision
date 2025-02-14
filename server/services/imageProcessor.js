@@ -38,7 +38,7 @@ const processImage = async (imageBuffer, settings) => {
 
     // Шаг 1: Преобразование в градации серого
     // image = image.greyscale()
-    // image = image.grayscale()
+    // image = image.grayscale({ bayer: true }) // 50%
     // image = image.destroy()
 
     // Шаг 2: Настройка контрастности
@@ -48,6 +48,8 @@ const processImage = async (imageBuffer, settings) => {
 
     // Шаг 4: Настройка яркости
     image = image.linear(brightness, 0)
+
+    // image = image.negate()
 
     // Шаг 5: Преобразование в JPEG
     image = image.toFormat("jpeg")

@@ -1,6 +1,6 @@
 const express = require("express")
 const multer = require("multer")
-const cors = require("cors") 
+const cors = require("cors")
 const { processImage } = require("./services/imageProcessor")
 
 const app = express()

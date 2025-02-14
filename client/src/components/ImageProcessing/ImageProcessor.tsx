@@ -60,11 +60,11 @@ export const ImageProcessor = () => {
 
   return (
     <>
-      <h1>Приложение для обработки изображений</h1>
+      <h1>Reticula Vision</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
         <UploadFile onFileChange={handleFileChange} />
         <button type="submit" className={styles.submitButton}>
-          Загрузить и обработать
+          process the image
         </button>
       </form>
       {resultImage && (

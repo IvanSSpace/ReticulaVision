@@ -11,7 +11,7 @@ export const useResizablePanels = (
 
       // Ограничиваем значения
       const minWidth = 30 // минимальная ширина 20%
-      const maxWidth = 80 // максимальная ширина 80%
+      const maxWidth = 75 // максимальная ширина 80%
       const clampedPercentage = Math.min(Math.max(percentage, minWidth), maxWidth)
 
       leftBlockRef.current.style.width = `${clampedPercentage}%`
